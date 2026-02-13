@@ -1,0 +1,29 @@
+package com.ajemi.barber.Ta7li9_app.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
+public class RequestRegister {
+
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    private String lastName;
+
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
+    private String email;
+    @NotBlank(message = "Role is required")
+    private String role;
+
+    @Pattern(
+        regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{6,}$",
+        message = "Password must contain uppercase, lowercase and number"
+    )
+    private String password;
+}
