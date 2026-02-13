@@ -26,4 +26,6 @@ public class RequestRegister {
         message = "Password must contain uppercase, lowercase and number"
     )
     private String password;
+    @NotBlank(message = "Password confirmation is required")
+    private String confirmPassword;
 }

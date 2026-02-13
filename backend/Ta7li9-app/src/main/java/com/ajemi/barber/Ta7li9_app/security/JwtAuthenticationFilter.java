@@ -1,14 +1,16 @@
 package com.ajemi.barber.Ta7li9_app.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
+import java.util.Collections;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,17 +30,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
 
             // 2. Ila l-token kayna w s7i7a
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String email = jwtUtils.getEmailFromJwtToken(jwt);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            String email = jwtUtils.getEmailFromJwtToken(jwt);
+            Long id = jwtUtils.getIdFromJwtToken(jwt);
+            String role = jwtUtils.getRoleFromJwtToken(jwt);
 
-                // 3. N-goulou l Spring Security bli had l-user raho m-authentifié
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(email, null, null);
-                
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            // 1. Crée l-objet Principal
+            UserPrincipal principal = new UserPrincipal(id, email, role);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            // 2. Passi l-objet f blast l-email
+            UsernamePasswordAuthenticationToken authentication = 
+                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+            
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
         }
