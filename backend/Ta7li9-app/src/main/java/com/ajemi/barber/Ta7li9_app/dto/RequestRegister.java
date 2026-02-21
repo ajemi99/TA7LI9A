@@ -21,6 +21,7 @@ public class RequestRegister {
     @NotBlank(message = "Role is required")
     private String role;
 
+
     @Pattern(
         regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{6,}$",
         message = "Password must contain uppercase, lowercase and number"
@@ -28,4 +29,11 @@ public class RequestRegister {
     private String password;
     @NotBlank(message = "Password confirmation is required")
     private String confirmPassword;
+
+    @NotBlank(message = "Phone number is required")
+    @Pattern(
+        regexp = "^[0-9]{10}$",
+        message = "Phone number must contain exactly 10 digits"
+    )
+    private String phoneNumber;
 }

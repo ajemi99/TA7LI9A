@@ -35,6 +35,8 @@ public class User {
     private String password;
 
     private String role;
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "coiffeur", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore // Darori bach ma-ndirouch Infinite Loop mlli n-rj3o l-user f JSON
